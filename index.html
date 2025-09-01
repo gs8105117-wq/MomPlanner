@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>MomPlanner - Planner Completo para Mães</title>
+    <meta name="description" content="Aplicativo completo para mães com bebês de 3 meses a 2 anos. Controle de mamadas, sono, cardápio semanal, tarefas e momentos especiais.">
+    <meta name="keywords" content="baby, mom, planner, feeding, sleep, tasks, cardápio, mamada, sono, bebê">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💕</text></svg>">
+    
+    <style>
+        /* CSS Variables */
+        :root {
+            --radius: 12px;
+            --background: hsl(45, 50%, 97%);
+            --foreground: hsl(210, 10%, 28%);
+            --card: hsl(0, 0%, 100%);
+            --card-foreground: hsl(210, 10%, 28%);
+            --primary: hsl(143, 35%, 55%);
+            --primary-foreground: hsl(0, 0%, 100%);
+            --secondary: hsl(240, 15%, 94%);
+            --secondary-foreground: hsl(210, 10%, 28%);
+            --muted: hsl(42, 35%, 93%);
+            --muted-foreground: hsl(210, 8%, 45%);
+            --accent: hsl(12, 85%, 75%);
+            --accent-foreground: hsl(0, 0%, 100%);
+            --destructive: hsl(0, 62%, 60%);
+            --destructive-foreground: hsl(0, 0%, 100%);
+            --border: hsl(214, 12%, 88%);
+            --input: hsl(214, 12%, 88%);
+            --ring: hsl(143, 35%, 55%);
+        }
+
+        .dark {
+            --background: hsl(210, 10%, 15%);
+            --foreground: hsl(42, 35%, 85%);
+            --card: hsl(210, 10%, 20%);
+            --card-foreground: hsl(42, 35%, 85%);
+            --primary: hsl(143, 35%, 55%);
+            --primary-foreground: hsl(0, 0%, 100%);
+            --secondary: hsl(210, 10%, 25%);
+            --secondary-foreground: hsl(42, 35%, 85%);
+            --muted: hsl(210, 10%, 25%);
+            --muted-foreground: hsl(210, 8%, 65%);
+            --accent: hsl(12, 85%, 75%);
+            --accent-foreground: hsl(0, 0%, 100%);
+            --destructive: hsl(0, 62%, 60%);
+            --destructive-foreground: hsl(0, 0%, 100%);
+            --border: hsl(210, 10%, 30%);
+            --input: hsl(210, 10%, 30%);
+            --ring: hsl(143, 35%, 55%);
+        }
+
+        /* Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, hsl(45, 50%, 97%) 0%, hsl(143, 35%, 95%) 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 28rem;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.08), 0 4px 16px -4px rgba(0, 0, 0, 0.06);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-header {
+            padding: 1.5rem 1.5rem 0;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--card-foreground);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: calc(var(--radius) - 2px);
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 1px solid transparent;
+            text-decoration: none;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--primary-foreground);
+            padding: 0.5rem 1rem;
+        }
+
+        .btn-primary:hover {
+            background: hsl(143, 35%, 50%);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--foreground);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .btn-outline:hover {
+            background: var(--muted);
+            box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.12);
+            transform: scale(1.02);
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo {
+            width: 2rem;
+            height: 2rem;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-foreground);
+            font-size: 1.25rem;
+        }
+
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--foreground);
+        }
+
+        /* Navigation Styles */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.95);
+            z-index: 50;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            max-width: 28rem;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: calc(var(--radius) - 4px);
+            transition: all 0.2s;
+            text-decoration: none;
+            color: var(--muted-foreground);
+            min-width: 3.5rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: hsl(143, 35%, 55%, 0.1);
+        }
+
+        .nav-item:hover {
+            color: var(--foreground);
+            background: var(--muted);
+        }
+
+        .nav-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Page Styles */
+        .page {
+            min-height: 100vh;
+            padding-bottom: 6rem;
+        }
+
+        .page-content {
+            padding: 1.5rem 0;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--foreground);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            margin-bottom: 2rem;
+        }
+
+        .welcome-card {
+            padding: 1.5rem;
+        }
+
+        .welcome-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-avatar {
+            width: 4rem;
+            height: 4rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            animation: gentle-bounce 2s infinite;
+        }
+
+        .welcome-text h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--foreground);
+            margin-bottom: 0.25rem;
+        }
+
+        .welcome-text p {
+            color: var(--muted-foreground);
+        }
+
+        .date-info {
+            background: var(--muted);
+            border-radius: calc(var(--radius) - 4px);
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .date-info span:first-child {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .date-info span:last-child {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--foreground);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+        }
+
+        .stat-icon.primary {
+            background: hsl(143, 35%, 55%, 0.1);
+            color: var(--primary);
+        }
+
+        .stat-icon.accent {
+            background: hsl(12, 85%, 75%, 0.1);
+            color: var(--accent);
+        }
+
+        .stat-icon.secondary {
+            background: hsl(240, 15%, 94%, 0.5);
+            color: var(--secondary-foreground);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--foreground);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+        }
+
+        /* Quick Actions */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .action-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-icon.primary {
+            background: hsl(143, 35%, 55%, 0.1);
+            color: var(--primary);
+        }
+
+        .action-icon.accent {
+            background: hsl(12, 85%, 75%, 0.1);
+            color: var(--accent);
+        }
+
+        .action-icon.secondary {
+            background: hsl(240, 15%, 94%, 0.5);
+            color: var(--secondary-foreground);
+        }
+
+        .action-text {
+            text-align: center;
+        }
+
+        .action-title {
+            font-weight: 600;
+            color: var(--foreground);
+        }
+
+        .action-subtitle {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .empty-icon {
+            width: 3rem;
+            height: 3rem;
+            color: var(--muted-foreground);
+            margin: 0 auto 1rem;
+        }
+
+        .empty-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--foreground);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-description {
+            color: var(--muted-foreground);
+            margin-bottom: 1rem;
+        }
+
+        /* Animations */
+        @keyframes gentle-bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-3px);
+            }
+            60% {
+                transform: translateY(-2px);
+            }
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--foreground);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: calc(var(--radius) - 2px);
+            background: var(--background);
+            color: var(--foreground);
+            font-size: 0.875rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--ring);
+            box-shadow: 0 0 0 2px hsl(143, 35%, 55%, 0.2);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: calc(var(--radius) - 2px);
+            background: var(--background);
+            color: var(--foreground);
+            font-size: 0.875rem;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: calc(var(--radius) - 2px);
+            background: var(--background);
+            color: var(--foreground);
+            font-size: 0.875rem;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: var(--card);
+            border-radius: var(--radius);
+            max-width: 24rem;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--foreground);
+        }
+
+        .modal-description {
+            color: var(--muted-foreground);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--foreground);
+            padding: 0.5rem 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--muted);
+        }
+
+        /* Icons (SVG) */
+        .icon {
+            width: 1em;
+            height: 1em;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="gradient-bg">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-left">
+                        <div class="logo">💕</div>
+                        <h1 class="header-title">MomPlanner</h1>
+                    </div>
+                    <button class="btn-secondary" style="padding: 0.5rem; border-radius: 50%;">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="1"/>
+                            <circle cx="12" cy="5" r="1"/>
+                            <circle cx="12" cy="19" r="1"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container page-content">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <div class="card">
+                    <div class="welcome-card">
+                        <div class="welcome-header">
+                            <div class="welcome-avatar">💕</div>
+                            <div class="welcome-text">
+                                <h2>Olá, Marina!</h2>
+                                <p>Como está o seu dia com o pequeno?</p>
+                            </div>
+                        </div>
+                        <div class="date-info">
+                            <span>Hoje é</span>
+                            <span id="current-date"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Section -->
+            <section class="stats-grid">
+                <div class="card">
+                    <div class="stat-card">
+                        <div class="stat-icon primary">
+                            <svg class="icon" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <div class="stat-value">2h</div>
+                        <div class="stat-label">Próxima mamada</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="stat-card">
+                        <div class="stat-icon accent">
+                            <svg class="icon" viewBox="0 0 24 24">
+                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                            </svg>
+                        </div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Sonecas hoje</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="stat-card">
+                        <div class="stat-icon secondary">
+                            <svg class="icon" viewBox="0 0 24 24">
+                                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                                <polyline points="16 7 22 7 22 13"/>
+                            </svg>
+                        </div>
+                        <div class="stat-value">4/6</div>
+                        <div class="stat-label">Tarefas feitas</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section>
+                <h3 class="page-title" style="font-size: 1.125rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <svg class="icon" style="color: var(--primary);" viewBox="0 0 24 24">
+                        <path d="M5 12h14"/>
+                        <path d="M12 5v14"/>
+                    </svg>
+                    Ações Rápidas
+                </h3>
+                <div class="actions-grid">
+                    <a href="#" class="card btn-outline action-card" onclick="openModal('feeding')">
+                        <div class="action-icon primary">
+                            <svg class="icon" style="width: 1.75rem; height: 1.75rem;" viewBox="0 0 24 24">
+                                <path d="M5 12h14"/>
+                                <path d="M12 5v14"/>
+                            </svg>
+                        </div>
+                        <div class="action-text">
+                            <div class="action-title">Nova Mamada</div>
+                            <div class="action-subtitle">Registrar agora</div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="card btn-outline action-card" onclick="openModal('sleep')">
+                        <div class="action-icon accent">
+                            <svg class="icon" style="width: 1.75rem; height: 1.75rem;" viewBox="0 0 24 24">
+                                <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/>
+                                <path d="M9 18h6"/>
+                                <path d="M10 22h4"/>
+                            </svg>
+                        </div>
+                        <div class="action-text">
+                            <div class="action-title">Iniciar Sono</div>
+                            <div class="action-subtitle">Registrar soneca</div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="card btn-outline action-card" onclick="openModal('meal')">
+                        <div class="action-icon secondary">
+                            <svg class="icon" style="width: 1.75rem; height: 1.75rem;" viewBox="0 0 24 24">
+                                <path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"/>
+                                <path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/>
+                                <path d="m2.1 21.8 6.4-6.3"/>
+                                <path d="m19 5-7 7"/>
+                            </svg>
+                        </div>
+                        <div class="action-text">
+                            <div class="action-title">Nova Refeição</div>
+                            <div class="action-subtitle">Adicionar ao cardápio</div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="card btn-outline action-card" onclick="openModal('note')">
+                        <div class="action-icon primary" style="background: hsl(143, 35%, 55%, 0.2);">
+                            <svg class="icon" style="width: 1.75rem; height: 1.75rem;" viewBox="0 0 24 24">
+                                <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/>
+                                <path d="M15 3v4a2 2 0 0 0 2 2h4"/>
+                            </svg>
+                        </div>
+                        <div class="action-text">
+                            <div class="action-title">Nova Nota</div>
+                            <div class="action-subtitle">Momento especial</div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Recent Notes -->
+            <section>
+                <h3 class="page-title" style="font-size: 1.125rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <svg class="icon" style="color: var(--primary);" viewBox="0 0 24 24">
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                    </svg>
+                    Momentos Especiais
+                </h3>
+                <div class="card">
+                    <div class="empty-state">
+                        <svg class="empty-icon icon" viewBox="0 0 24 24">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                        </svg>
+                        <div class="empty-title">Nenhum momento especial registrado ainda</div>
+                        <div class="empty-description">Comece registrando os momentos especiais do seu bebê</div>
+                        <button class="btn btn-primary" onclick="openModal('note')">
+                            <svg class="icon" viewBox="0 0 24 24">
+                                <path d="M5 12h14"/>
+                                <path d="M12 5v14"/>
+                            </svg>
+                            Adicionar primeira nota
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-content">
+                <a href="#" class="nav-item active" onclick="showPage('dashboard')">
+                    <svg class="nav-icon icon" viewBox="0 0 24 24">
+                        <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+                        <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    </svg>
+                    <span class="nav-label">Início</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('feeding')">
+                    <svg class="nav-icon icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span class="nav-label">Mamadas</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('meals')">
+                    <svg class="nav-icon icon" viewBox="0 0 24 24">
+                        <path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"/>
+                        <path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/>
+                        <path d="m2.1 21.8 6.4-6.3"/>
+                        <path d="m19 5-7 7"/>
+                    </svg>
+                    <span class="nav-label">Cardápio</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('sleep')">
+                    <svg class="nav-icon icon" viewBox="0 0 24 24">
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                    </svg>
+                    <span class="nav-label">Sono</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('tasks')">
+                    <svg class="nav-icon icon" viewBox="0 0 24 24">
+                        <path d="M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.5"/>
+                        <path d="m9 11 3 3L22 4"/>
+                    </svg>
+                    <span class="nav-label">Tarefas</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Modal for Forms -->
+    <div id="modal" class="modal-overlay hidden" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Nova Mamada</h2>
+                <p class="modal-description" id="modal-description">Registre uma nova mamada</p>
+            </div>
+            
+            <form id="modal-form">
+                <div class="form-group">
+                    <label class="form-label">Data e Hora</label>
+                    <input type="datetime-local" class="form-input" id="datetime-input" required>
+                </div>
+                
+                <div class="form-group" id="type-group">
+                    <label class="form-label">Tipo</label>
+                    <select class="form-select" id="type-select">
+                        <option value="breast">Peito</option>
+                        <option value="formula">Fórmula</option>
+                        <option value="mixed">Misto</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="content-group" style="display: none;">
+                    <label class="form-label">Conteúdo</label>
+                    <textarea class="form-textarea" id="content-textarea" placeholder="Descreva este momento especial..."></textarea>
+                </div>
+                
+                <div class="form-group" id="quantity-group">
+                    <label class="form-label">Quantidade (ml)</label>
+                    <input type="number" class="form-input" id="quantity-input" placeholder="150">
+                </div>
+                
+                <div class="form-group" id="duration-group">
+                    <label class="form-label">Duração (min)</label>
+                    <input type="number" class="form-input" id="duration-input" placeholder="20">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Observações</label>
+                    <textarea class="form-textarea" id="notes-textarea" placeholder="Observações..."></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Data storage (in-memory)
+        let currentData = {
+            feedings: [],
+            sleepSessions: [],
+            meals: [],
+            tasks: [],
+            notes: []
+        };
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrentDate();
+            loadSampleData();
+        });
+
+        // Update current date
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            document.getElementById('current-date').textContent = 
+                now.toLocaleDateString('pt-BR', options);
+        }
+
+        // Load sample data
+        function loadSampleData() {
+            // Add some sample data for demonstration
+            currentData.feedings.push({
+                id: '1',
+                datetime: new Date(),
+                type: 'breast',
+                quantity: 120,
+                duration: 15,
+                notes: 'Bebê estava calmo'
+            });
+
+            currentData.sleepSessions.push({
+                id: '1',
+                startTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
+                endTime: new Date(Date.now() - 1 * 60 * 60 * 1000),
+                duration: 60,
+                quality: 'good'
+            });
+
+            currentData.tasks.push(
+                { id: '1', title: 'Trocar fralda', completed: true, category: 'diaper' },
+                { id: '2', title: 'Dar banho', completed: true, category: 'bath' },
+                { id: '3', title: 'Consulta pediatra', completed: false, category: 'appointment' }
+            );
+        }
+
+        // Navigation
+        function showPage(page) {
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.nav-item').classList.add('active');
+
+            // For demo purposes, just show alert
+            alert(`Navegando para: ${page}`);
+        }
+
+        // Modal functions
+        function openModal(type) {
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modal-title');
+            const description = document.getElementById('modal-description');
+            const form = document.getElementById('modal-form');
+            
+            // Reset form
+            form.reset();
+            
+            // Set current datetime
+            const now = new Date();
+            const datetime = now.toISOString().slice(0, 16);
+            document.getElementById('datetime-input').value = datetime;
+
+            // Configure modal based on type
+            switch(type) {
+                case 'feeding':
+                    title.textContent = 'Nova Mamada';
+                    description.textContent = 'Registre uma nova mamada';
+                    showGroups(['type-group', 'quantity-group', 'duration-group']);
+                    break;
+                case 'sleep':
+                    title.textContent = 'Nova Soneca';
+                    description.textContent = 'Registre uma nova soneca';
+                    showGroups([]);
+                    break;
+                case 'meal':
+                    title.textContent = 'Nova Refeição';
+                    description.textContent = 'Adicione uma nova refeição ao cardápio';
+                    showGroups([]);
+                    break;
+                case 'note':
+                    title.textContent = 'Nova Nota';
+                    description.textContent = 'Registre um momento especial';
+                    showGroups(['content-group']);
+                    break;
+            }
+
+            form.onsubmit = (e) => handleFormSubmit(e, type);
+            modal.classList.remove('hidden');
+        }
+
+        function showGroups(groups) {
+            // Hide all optional groups
+            ['type-group', 'quantity-group', 'duration-group', 'content-group'].forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
+            
+            // Show specified groups
+            groups.forEach(id => {
+                document.getElementById(id).style.display = 'block';
+            });
+        }
+
+        function closeModal(event) {
+            if (event && event.target !== document.getElementById('modal')) return;
+            document.getElementById('modal').classList.add('hidden');
+        }
+
+        function handleFormSubmit(event, type) {
+            event.preventDefault();
+            
+            const datetime = document.getElementById('datetime-input').value;
+            const notes = document.getElementById('notes-textarea').value;
+            
+            let newItem = {
+                id: Date.now().toString(),
+                datetime: new Date(datetime),
+                notes: notes || null
+            };
+
+            switch(type) {
+                case 'feeding':
+                    newItem.type = document.getElementById('type-select').value;
+                    newItem.quantity = parseInt(document.getElementById('quantity-input').value) || null;
+                    newItem.duration = parseInt(document.getElementById('duration-input').value) || null;
+                    currentData.feedings.push(newItem);
+                    break;
+                case 'sleep':
+                    newItem.startTime = new Date(datetime);
+                    newItem.endTime = null;
+                    currentData.sleepSessions.push(newItem);
+                    break;
+                case 'meal':
+                    newItem.description = 'Nova refeição';
+                    newItem.mealType = 'breakfast';
+                    currentData.meals.push(newItem);
+                    break;
+                case 'note':
+                    newItem.content = document.getElementById('content-textarea').value;
+                    newItem.category = 'general';
+                    currentData.notes.push(newItem);
+                    break;
+            }
+
+            closeModal();
+            showSuccessMessage(`${type === 'feeding' ? 'Mamada' : type === 'sleep' ? 'Soneca' : type === 'meal' ? 'Refeição' : 'Nota'} registrada com sucesso!`);
+        }
+
+        function showSuccessMessage(message) {
+            // Simple alert for demo
+            alert(message);
+        }
+
+        // Service Worker Registration for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(console.error);
+        }
+    </script>
+</body>
+</html>
