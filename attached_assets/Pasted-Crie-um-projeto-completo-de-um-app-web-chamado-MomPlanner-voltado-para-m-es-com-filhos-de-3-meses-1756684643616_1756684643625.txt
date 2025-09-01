@@ -1,0 +1,30 @@
+Crie um projeto completo de um app web chamado "MomPlanner", voltado para mães com filhos de 3 meses até 2 anos. O objetivo do app é ser um planner completo, com funcionalidades que valem a pena pagar R$37,00. Siga estas instruções detalhadas:
+
+1. **Frontend (React + Tailwind)**:
+   - Criar páginas principais: Dashboard, Cardápio Semanal, Mamadas, Sono, Tarefas e Notas.
+   - Cada página deve ter layout responsivo, com cores suaves e ícones simples.
+   - Dashboard deve mostrar resumo: próximas mamadas, refeições do dia, tarefas e horários de sono.
+   - Cardápio semanal: permitir adicionar refeições (café da manhã, almoço, lanche da tarde, jantar) e notas pessoais.
+   - Mamadas: registrar horário, quantidade, lado do peito ou tipo de fórmula.
+   - Sono: registrar horário de início e fim das sonecas.
+   - Tarefas: checklist diário de tarefas (fraldas, banho, consultas, vacinas).
+   - Notas: área para registrar momentos especiais ou observações.
+   - Implementar navegação entre páginas com React Router.
+
+2. **Backend (Node.js + Express)**:
+   - Criar rotas REST para todas as funcionalidades do app: cardápio, mamadas, sono, tarefas e notas.
+   - Implementar controllers e modelos de dados correspondentes.
+   - Usar SQLite como banco de dados local para armazenar todas as informações.
+   - Preparar endpoints de CRUD (Create, Read, Update, Delete) para cada módulo.
+   - Estruturar o projeto em pastas: /routes, /controllers, /models.
+
+3. **Banco de Dados (SQLite)**:
+   - Criar tabelas para: cardápio, mamadas, sono, tarefas e notas.
+   - Cada tabela deve ter colunas apropriadas: id, data, horário, descrição, quantidade, observações etc.
+
+4. **Funcionalidades extras para valor agregado**:
+   - Dashboard com gráficos simples (ex: evolução das mamadas, sono e refeições).
+   - Alertas ou lembretes de horários importantes (ex: mamadas, sonecas, refeições).
+   - Possibilidade de adicionar notas pessoais em qualquer módulo.
+
+5. **Estrutura do projeto final**:
